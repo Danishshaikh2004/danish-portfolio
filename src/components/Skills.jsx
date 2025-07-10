@@ -1,4 +1,5 @@
 import tailwind from "../assets/tcss.svg";
+import wordpress from "../assets/wordpress.png"
 import api from "../assets/api.png"; 
 
 const skills = [
@@ -35,8 +36,8 @@ const skills = [
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
   },
   {
-    name: "Java",
-    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
+    name: "Wordpress",
+    logo: wordpress,
   },
   {
     name: "Git",

@@ -65,7 +65,7 @@ const Navbar = () => {
          
             <li>
               <a
-                href="#contact"
+                href="/contact"
                 onClick={() => setMenuOpen(false)}
                 className="block mt-2 px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 text-white text-center text-sm font-medium shadow hover:opacity-90 transition"
               >

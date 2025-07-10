@@ -83,24 +83,24 @@ const Hero = () => {
           </div>
         </div>
 
-  
+
         <div className="md:w-1/2 flex justify-center md:justify-end relative mt-10 md:mt-0">
-  
-  <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72">
 
-    <div className="w-full h-full rounded-full border-[6px] border-purple-500 p-1 shadow-xl">
-      <img
-        src={profile}
-        alt="Danish Shaikh"
-        className="rounded-full w-full h-full object-cover"
-      />
-    </div>
+          <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72">
 
-    <div className="absolute -top-2 -right-2 w-4 h-4 bg-purple-500 rounded-full animate-float" />
+            <div className="w-full h-full rounded-full border-[6px] border-purple-500 p-1 shadow-xl">
+              <img
+                src={profile}
+                alt="Danish Shaikh"
+                className="rounded-full w-full h-full object-cover"
+              />
+            </div>
 
-    <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-blue-400 rounded-full animate-float delay-300" />
-  </div>
-</div>
+            <div className="absolute -top-2 -right-2 w-4 h-4 bg-purple-500 rounded-full animate-float" />
+
+            <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-blue-400 rounded-full animate-float delay-300" />
+          </div>
+        </div>
 
       </div>
     </section>
