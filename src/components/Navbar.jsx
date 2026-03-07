@@ -1,82 +1,172 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+﻿import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Download } from "lucide-react";
+import resume from "../assets/Resume.pdf";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
-  const navItems = ["Home", "About", "Skills", "Projects"];
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    
+    const handleSectionHighlight = () => {
+      const sections = ["home", "about", "skills", "projects", "journey", "contact"];
+      const scrollPosition = window.scrollY + 100;
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetHeight = element.offsetHeight;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleSectionHighlight);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleSectionHighlight);
+    };
+  }, []);
+
+  const navItems = [
+    { name: "Home", href: "#home" },
+    { name: "About", href: "#about" },
+    { name: "Skills", href: "#skills" },
+    { name: "Projects", href: "#projects" },
+    { name: "Journey", href: "#journey" },
+    { name: "Contact", href: "#contact" },
+  ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-background/70 backdrop-blur-md border-white/10">
-      <div className="max-w-7xl mx-auto relative flex justify-between items-center px-6 py-4">
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-background/90 backdrop-blur-xl border-b border-white/5 py-3"
+          : "bg-transparent py-5"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
+        {/* Logo */}
+        <motion.a
+          href="#home"
+          whileHover={{ scale: 1.05 }}
+          className="text-2xl font-bold font-heading tracking-tight text-white"
+        >
+          <span className="text-accent-blue">D</span>S
+        </motion.a>
 
-        <div className="text-xl font-bold tracking-wider bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text select-none">
-          &lt;DS/&gt;
-        </div>
-
-
-
-        <ul className="hidden md:flex gap-8 text-white text-sm uppercase font-semibold tracking-wide absolute left-1/2 -translate-x-1/2">
+        {/* Desktop Navigation */}
+        <ul className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => (
-            <li key={item}>
+            <motion.li key={item.name}>
               <a
-                href={`#${item.toLowerCase()}`}
-                className="transition hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-400 hover:to-blue-400"
+                href={item.href}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  activeSection === item.href.slice(1)
+                    ? "text-accent-blue bg-accent-blue/10"
+                    : "text-text-secondary hover:text-white hover:bg-white/5"
+                }`}
               >
-                {item}
+                {item.name}
               </a>
-            </li>
+            </motion.li>
           ))}
         </ul>
 
-     
-        <a
-          href="#contact"
-          className="hidden md:inline-block px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 text-white text-sm font-medium shadow hover:opacity-90 transition"
-        >
-          🚀 Hire Me
-        </a>
+        {/* Desktop CTA Buttons */}
+        <div className="hidden lg:flex items-center gap-3">
+          <a
+            href={resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-all duration-200"
+          >
+            <Download size={16} />
+            Resume
+          </a>
+          <a
+            href="#contact"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent-blue to-accent-cyan text-background font-semibold text-sm hover:shadow-lg hover:shadow-accent-blue/25 transition-all duration-200"
+          >
+            Hire Me
+          </a>
+        </div>
 
+        {/* Mobile Menu Button */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden text-white"
+          className="lg:hidden text-white p-2"
           aria-label="Toggle menu"
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-
-      {menuOpen && (
-        <div className="md:hidden bg-background border-t border-white/10 px-6 pb-6 pt-2">
-          <ul className="flex flex-col gap-4 text-white text-sm uppercase font-semibold tracking-wide">
-            {navItems.map((item) => (
-              <li key={item}>
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-background/95 backdrop-blur-xl border-t border-white/5"
+          >
+            <ul className="flex flex-col items-center gap-2 py-6 px-4">
+              {navItems.map((item) => (
+                <li key={item.name}>
+                  <a
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`block px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      activeSection === item.href.slice(1)
+                        ? "text-accent-blue bg-accent-blue/10"
+                        : "text-text-secondary hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+              <li className="mt-4 flex gap-3">
                 <a
-                  href={`#${item.toLowerCase()}`}
-                  className="block w-full transition hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-400 hover:to-blue-400"
+                  href={resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-all duration-200"
                 >
-                  {item}
+                  <Download size={16} />
+                  Resume
+                </a>
+                <a
+                  href="#contact"
+                  onClick={() => setMenuOpen(false)}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent-blue to-accent-cyan text-background font-semibold text-sm"
+                >
+                  Hire Me
                 </a>
               </li>
-            ))}
-
-         
-            <li>
-              <a
-                href="/contact"
-                onClick={() => setMenuOpen(false)}
-                className="block mt-2 px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 text-white text-center text-sm font-medium shadow hover:opacity-90 transition"
-              >
-                🚀 Hire Me
-              </a>
-            </li>
-          </ul>
-        </div>
-      )}
-    </nav>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 };
 
 export default Navbar;
+
